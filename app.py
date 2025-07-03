@@ -3,9 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import os
 
+# 💾 Veritabanı dosyasının kalıcı yerde tutulması (static/data)
+DB_PATH = os.path.join('static', 'data', 'gameface.db')
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'gizli-anahtar'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gameface.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/images'
@@ -14,7 +17,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 
-# MODELLER
+# 🔧 MODELLER
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
@@ -27,26 +30,24 @@ class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
 
-# Yardımcı fonksiyon
+# 🔐 Yardımcı
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def init_database():
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    with app.app_context():
-        db.create_all()
-        if Game.query.count() == 0:
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    if not os.path.exists(DB_PATH):
+        with app.app_context():
+            db.create_all()
             demo_games = [
-                Game(name="Minecraft", story="Minecraft, bloklardan oluşan bir dünyada hayatta kalma oyunudur.",
-                     best_players="Dream, Technoblade", company="Mojang", image_filename="minecraft.jpg"),
-                Game(name="Valorant", story="Valorant, ajanlarla oynanan taktiksel FPS oyunudur.",
-                     best_players="TenZ, ScreaM", company="Riot Games", image_filename="valorant.jpg"),
-                Game(name="Rocket League", story="Arabalarla futbol oynanan rekabetçi bir oyundur.",
-                     best_players="Turbopolsa, GarrettG", company="Psyonix", image_filename="rocketleague.jpg")
+                Game(name="Minecraft", story="Bloklardan oluşan dünyada hayatta kalma.", best_players="Dream, Technoblade", company="Mojang", image_filename="minecraft.jpg"),
+                Game(name="Valorant", story="Ajanlarla oynanan taktiksel FPS.", best_players="TenZ, ScreaM", company="Riot Games", image_filename="valorant.jpg")
             ]
             db.session.bulk_save_objects(demo_games)
             db.session.commit()
 
+# 🔓 Ana Sayfa
 @app.route('/')
 def index():
     game_id = request.args.get('game_id', type=int)
@@ -55,6 +56,7 @@ def index():
     feedbacks = Feedback.query.order_by(Feedback.id.desc()).all()
     return render_template('index.html', games=games, game=game, feedbacks=feedbacks)
 
+# 🎮 Oyun Ekle
 @app.route('/add_game', methods=['POST'])
 def add_game():
     name = request.form.get('name', '').strip()
@@ -72,7 +74,7 @@ def add_game():
         return redirect(url_for('index'))
 
     filename = secure_filename(file.filename)
-    file.save(os.path.join(UPLOAD_FOLDER, filename))
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     game = Game(name=name, story=story, best_players=best_players, company=company, image_filename=filename)
     db.session.add(game)
@@ -80,6 +82,7 @@ def add_game():
     flash("Oyun eklendi.", "success")
     return redirect(url_for('index'))
 
+# ✏️ Oyun Güncelle
 @app.route('/edit_game', methods=['POST'])
 def edit_game():
     old_name = request.form.get('old_name', '').strip()
@@ -96,6 +99,7 @@ def edit_game():
     flash("Oyun güncellendi.", "success")
     return redirect(url_for('index', game_id=game.id))
 
+# 🗑️ Oyun Sil
 @app.route('/delete_game', methods=['POST'])
 def delete_game():
     name = request.form.get('name', '').strip()
@@ -103,27 +107,31 @@ def delete_game():
     if not game:
         flash("Silinecek oyun bulunamadı.", "error")
         return redirect(url_for('index'))
-
     db.session.delete(game)
     db.session.commit()
     flash("Oyun silindi.", "success")
     return redirect(url_for('index'))
 
+# 💬 Geri Bildirim
 @app.route('/add_feedback', methods=['POST'])
 def add_feedback():
     message = request.form.get('message', '').strip()
     if not message:
         flash("Geri bildirim boş olamaz.", "error")
         return redirect(url_for('index'))
-
     feedback = Feedback(message=message)
     db.session.add(feedback)
     db.session.commit()
     flash("Teşekkürler!", "success")
     return redirect(url_for('index'))
 
+# 🛡️ Global Hata Yakalama
+@app.errorhandler(500)
+def internal_error(e):
+    return "<h2>Bir hata oluştu. Lütfen tekrar deneyin.</h2>", 500
+
+# 🚀 Başlat
 if __name__ == '__main__':
     init_database()
-    import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
