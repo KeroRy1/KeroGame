@@ -3,22 +3,21 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
-# --- Konum ve Ayarlar ---
-BASE_DIR        = os.path.abspath(os.path.dirname(__file__))
-DB_PATH         = os.path.join(BASE_DIR, 'gameface.db')
-UPLOAD_DIR      = os.path.join(BASE_DIR, 'static', 'images')
+# --- Ayarlar ve Dizine Yollar ---
+BASE_DIR           = os.path.abspath(os.path.dirname(__file__))
+DB_PATH            = os.path.join(BASE_DIR, 'gameface.db')
+UPLOAD_FOLDER      = os.path.join(BASE_DIR, 'static', 'images')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.config['SECRET_KEY']               = os.environ.get('SECRET_KEY', 'dev-key')
 app.config['SQLALCHEMY_DATABASE_URI']  = f'sqlite:///{DB_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER']            = UPLOAD_DIR
+app.config['UPLOAD_FOLDER']            = UPLOAD_FOLDER
 
 # Statik Bağış Bilgileri
-app.config['DONATION_NAME']            = 'Eymen Yiğit Karaman'
-app.config['DONATION_IBAN']            = 'TR18 0001 5001 5800 7341 5288 14'
-
+app.config['DONATION_NAME'] = 'Eymen Yiğit Karaman'
+app.config['DONATION_IBAN'] = 'TR18 0001 5001 5800 7341 5288 14
 db = SQLAlchemy(app)
 
 # --- Modeller ---
@@ -34,18 +33,18 @@ class Feedback(db.Model):
     id      = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
 
-# --- Yardımcı Fonksiyonlar ---
+# --- Yardımcı Fonksiyon ---
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def init_db():
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     if not os.path.exists(DB_PATH):
         db.create_all()
-        # Demo verisi oluştur
+        # Demo Oyun Verisi
         for i in range(1, 6):
             demo = Game(
-                name=f"Game{i}",
+                name=f"Game {i}",
                 story=f"Demo hikâye #{i}",
                 best_players=f"Player{i}A, Player{i}B",
                 company=f"Company {i}"
@@ -53,7 +52,7 @@ def init_db():
             db.session.add(demo)
         db.session.commit()
 
-# Uygulama her ayağa kalktığında DB'yi hazır la
+# --- Uygulama Başlangıcında DB Hazırlama ---
 with app.app_context():
     init_db()
 
@@ -66,11 +65,14 @@ def index():
     games     = base_q.filter(Game.name.ilike(f"%{search}%")).all() if search else base_q.all()
     selected  = Game.query.get(game_id) if game_id else None
     feedbacks = Feedback.query.order_by(Feedback.id.desc()).all()
-    return render_template('index.html',
-                           games=games,
-                           game=selected,
-                           feedbacks=feedbacks,
-                           search=search)
+
+    return render_template(
+        'index.html',
+        games=games,
+        game=selected,
+        feedbacks=feedbacks,
+        search=search
+    )
 
 @app.route('/add_game', methods=['POST'])
 def add_game():
@@ -83,9 +85,11 @@ def add_game():
     if not name:
         flash("Oyun adı zorunlu.", "error")
         return redirect(url_for('index'))
+
     if file and not allowed_file(file.filename):
         flash("Geçersiz resim formatı.", "error")
         return redirect(url_for('index'))
+
     if Game.query.filter_by(name=name).first():
         flash("Bu isimde oyun mevcut.", "error")
         return redirect(url_for('index'))
@@ -93,13 +97,15 @@ def add_game():
     filename = 'default.png'
     if file:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_DIR, filename))
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-    game = Game(name=name,
-                story=story,
-                best_players=best_players,
-                company=company,
-                image_filename=filename)
+    game = Game(
+        name=name,
+        story=story,
+        best_players=best_players,
+        company=company,
+        image_filename=filename
+    )
     db.session.add(game)
     db.session.commit()
     flash("Oyun eklendi.", "success")
@@ -116,7 +122,7 @@ def edit_game(game_id):
         file = request.files.get('image_file')
         if file and allowed_file(file.filename):
             fn = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_DIR, fn))
+            file.save(os.path.join(UPLOAD_FOLDER, fn))
             game.image_filename = fn
         db.session.commit()
         flash("Oyun güncellendi.", "success")
@@ -151,7 +157,6 @@ def gift():
 def internal_error(e):
     return f"<h3>Sunucu Hatası</h3><pre>{e}</pre>", 500
 
-# --- Uygulamayı Başlat ---
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
