@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Oyun Ekle{% endblock %}
+{% block content %}
+<h2>Yeni Oyun Ekle</h2>
+<form method="POST">
+    <input type="text" name="name" placeholder="Oyun Adı" required><br>
+    <input type="text" name="story" placeholder="Hikaye" required><br>
+    <input type="text" name="top_players" placeholder="En İyi Oyuncular (virgülle)" required><br>
+    <input type="text" name="company" placeholder="Şirket" required><br>
+    <button type="submit">Ekle</button>
+</form>
+{% endblock %}
