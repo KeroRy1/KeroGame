@@ -15,6 +15,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER']           = UPLOAD_DIR
 
+app.config['DONATION_IBAN']  = 'TR18 0001 5001 5800 7341 5288 14'
+app.config['DONATION_NAME']  = 'Eymen Yiğit Karaman'
+
 db = SQLAlchemy(app)
 
 class Game(db.Model):
