@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>GameFace</title>
-  <link rel="stylesheet" href="{{ url_for('static','style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="container">
     {% with msgs = get_flashed_messages(with_categories=true) %}
       {% if msgs %}
         <ul class="flashes">
-          {% for cat,msg in msgs %}
-            <li class="{{ cat }}">{{ msg }}</li>
+          {% for category, msg in msgs %}
+            <li class="{{ category }}">{{ msg }}</li>
           {% endfor %}
         </ul>
       {% endif %}
     {% endwith %}
+
     {% block content %}{% endblock %}
   </div>
 </body>
