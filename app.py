@@ -17,8 +17,10 @@ def index():
 @app.route('/game/<int:game_id>')
 def game_detail(game_id):
     game = next((g for g in games if g["id"] == game_id), None)
+    if not game:
+        return "Oyun bulunamadı", 404
     return render_template('edit_game.html', game=game, games=games, feedbacks=feedbacks)
-
+    
 @app.route('/add', methods=['GET', 'POST'])
 def add_game():
     if request.method == 'POST':
