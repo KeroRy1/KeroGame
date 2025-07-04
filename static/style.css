@@ -1,185 +1,95 @@
-/* Genel sıfırlama */
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-}
 body {
-  background-color: #121212;
-  color: #e0e0e0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
 }
+
 .container {
-  display: grid;
-  grid-template-columns: 250px 1fr 250px;
-  height: 100vh;
-  width: 100vw;
-}
-.sidebar {
-  background-color: #1e1e1e;
-  padding: 20px;
-  overflow-y: auto;
-  border-right: 1px solid #333;
-}
-.sidebar h2 {
-  margin-bottom: 15px;
-  color: #f5a623;
-  text-align: center;
-}
-.games-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-.game-card {
-  background-color: #2a2a2a;
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 30px;
   border-radius: 8px;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.form input[type="text"],
+.form textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form button {
+  background: #0077cc;
+  color: white;
+  border: none;
   padding: 10px;
-  text-align: center;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-.game-card:hover {
-  background-color: #3a3a3a;
+
+.form button:hover {
+  background: #005fa3;
 }
-.game-card img {
-  width: 100%;
-  height: 120px;
+
+.game-list, .feedback-list {
+  list-style: none;
+  padding: 0;
+}
+
+.game-list li, .feedback-list li {
+  margin-bottom: 12px;
+}
+
+.thumb {
+  width: 60px;
+  height: 60px;
   object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  vertical-align: middle;
+  margin-right: 10px;
 }
-.game-card p {
-  font-weight: 600;
-  font-size: 1rem;
-}
-.main-content {
-  background-color: #181818;
-  padding: 30px 40px;
-  overflow-y: auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  position: relative;
-}
-.main-content h1#main-title {
-  font-size: 2.8rem;
-  margin-bottom: 15px;
-  color: #f5a623;
-}
-.welcome-text {
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin-bottom: 40px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #ccc;
-}
-#game-details {
-  margin-top: 25px;
-  text-align: left;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-#game-details h2 {
-  color: #f5a623;
-  margin-bottom: 5px;
-}
-#game-details p {
-  font-size: 1rem;
-  line-height: 1.4;
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-.rightbar {
-  background-color: #1e1e1e;
-  padding: 20px;
-  border-left: 1px solid #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
-}
-.rightbar h2 {
-  color: #f5a623;
+
+.flashes {
+  list-style: none;
+  padding: 0;
   margin-bottom: 20px;
 }
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
+
+.flashes li {
+  padding: 10px;
+  border-radius: 4px;
 }
-.action-btn {
-  background-color: #333;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 6px;
-  color: #eee;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
+
+.flashes .success {
+  background: #d4edda;
+  color: #155724;
 }
-.action-btn:hover {
-  background-color: #f5a623;
-  color: #121212;
+
+.flashes .error {
+  background: #f8d7da;
+  color: #721c24;
 }
-.popup {
-  margin-top: 30px;
-  padding: 15px 20px;
-  background-color: #333;
-  border-radius: 8px;
-  color: #f5a623;
-  font-weight: 600;
-  box-shadow: 0 0 10px #f5a623;
-  width: 100%;
-  text-align: center;
-}
-.modal {
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  background: #222;
-  color: #eee;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 90%;
-  box-sizing: border-box;
-}
-.close {
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #eee;
-}
-.close:hover {
-  color: #f5a623;
-}
-.back-home {
-  display: inline-block;
-  margin-bottom: 15px;
-  color: #f5a623;
+
+.button.cancel {
+  background: #ccc;
+  color: #333;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: color 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 4px;
 }
-.back-home:hover {
-  color: #fff;
+
+.button.cancel:hover {
+  background: #bbb;
 }
