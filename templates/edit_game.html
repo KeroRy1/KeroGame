@@ -1,29 +1,10 @@
 {% extends 'base.html' %}
 
+{% block title %}{{ game.name }} - GameFace{% endblock %}
+
 {% block content %}
-<div class="form-container">
-  <h1>🎮 Oyun Düzenle</h1>
-  <form action="{{ url_for('edit_game', game_id=game.id) }}"
-        method="POST"
-        enctype="multipart/form-data"
-        class="form">
-    <label>Oyun İsmi</label>
-    <input type="text" name="name" value="{{ game.name }}" required>
-
-    <label>Hikâye</label>
-    <textarea name="story">{{ game.story }}</textarea>
-
-    <label>En İyi Oyuncular</label>
-    <input type="text" name="best_players" value="{{ game.best_players }}">
-
-    <label>Şirket</label>
-    <input type="text" name="company" value="{{ game.company }}">
-
-    <label>Görsel Yükle (opsiyonel)</label>
-    <input type="file" name="image_file" accept="image/*">
-
-    <button type="submit">Güncelle</button>
-    <a href="{{ url_for('index') }}" class="btn cancel">İptal</a>
-  </form>
-</div>
+<h1>{{ game.name }}</h1>
+<p><strong>Hikaye:</strong> {{ game.story }}</p>
+<p><strong>En İyi Oyuncular:</strong> {{ game.top_players | join(', ') }}</p>
+<p><strong>Şirket:</strong> {{ game.company }}</p>
 {% endblock %}
