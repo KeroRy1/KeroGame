@@ -1,15 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="form-container">
-  <h1>🎁 GameFace’e Destek Ol</h1>
-  <p>Lütfen aşağıdaki banka hesabını kullanarak desteğinizi iletin:</p>
+<div class="layout-grid">
 
-  <p><strong>Hesap Sahibi:</strong> {{ config['DONATION_NAME'] }}</p>
-  <p><strong>IBAN:</strong><br>
-    <pre>{{ config['DONATION_IBAN'] }}</pre>
-  </p>
+  <!-- SOL: Boş -->
+  <nav class="sidebar-left">&nbsp;</nav>
 
-  <a href="{{ url_for('index') }}" class="btn cancel">← Ana Sayfaya Dön</a>
+  <!-- ORTA: Bağış Bilgileri -->
+  <main class="main-content">
+    <h1>🎁 GameFace’e Destek Ol</h1>
+    <p>Lütfen aşağıdaki hesaba bağış yapın:</p>
+    <p><strong>Hesap Sahibi:</strong><br>{{ config['DONATION_NAME'] }}</p>
+    <p><strong>IBAN:</strong><br>{{ config['DONATION_IBAN'] }}</p>
+  </main>
+
+  <!-- SAĞ: Geri Dön -->
+  <aside class="sidebar-right">
+    <button class="btn"
+      onclick="location.href='{{ url_for('index') }}'">
+      ← Ana Sayfaya Dön
+    </button>
+  </aside>
+
 </div>
 {% endblock %}
