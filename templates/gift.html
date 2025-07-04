@@ -3,11 +3,9 @@
 {% block content %}
 <div class="form-container">
   <h1>🎁 “{{ game.name }}” İçin Bağış</h1>
-  <form action="{{ url_for('gift', game_id=game.id) }}" method="POST" class="form">
-    <label>IBAN</label>
-    <input type="text" name="iban" placeholder="TRxx xxxx xxxx ..." required>
-    <button type="submit">Bağış Talep Et</button>
-    <a href="{{ url_for('index', game_id=game.id) }}" class="btn cancel">Geri</a>
-  </form>
+  <p>Lütfen aşağıdaki hesabı kullanarak destek olun:</p>
+  <p><strong>Hesap Sahibi:</strong> {{ config['DONATION_NAME'] }}</p>
+  <p><strong>IBAN:</strong> <code>{{ config['DONATION_IBAN'] }}</code></p>
+  <a href="{{ url_for('index', game_id=game.id) }}" class="btn cancel">Geri</a>
 </div>
 {% endblock %}
