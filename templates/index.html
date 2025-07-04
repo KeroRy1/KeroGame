@@ -1,123 +1,43 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<!-- Sol sütun -->
-<div class="sidebar">
-  <h2>Oyunlar</h2>
-  <div class="games-list">
-    {% for g in games %}
-    <div class="game-card" onclick="location.href='/?game_id={{ g.id }}'">
-      {% if g.image_filename %}
-        <img src="{{ url_for('static', filename='images/' ~ g.image_filename) }}" alt="{{ g.name }}">
-      {% endif %}
-      <p>{{ g.name }}</p>
-    </div>
-    {% endfor %}
-  </div>
-</div>
+<h1>🎮 GameFace</h1>
 
-<!-- Orta sütun -->
-<div class="main-content">
-  {% if game %}
-    <a href="{{ url_for('index') }}" class="back-home">← Ana Sayfaya Dön</a>
-    <h1 id="main-title">{{ game.name }}</h1>
-    {% if game.image_filename %}
-      <img src="{{ url_for('static', filename='images/' ~ game.image_filename) }}" alt="{{ game.name }}" style="max-width: 200px; margin-bottom: 10px;">
-    {% endif %}
-    <div id="game-details">
-      <h2>Hikaye</h2>
-      <p>{{ game.story or 'Hikaye bilgisi yok.' }}</p>
-      <h2>En İyi Oyuncular</h2>
-      <p>{{ game.best_players or 'Bilgi yok.' }}</p>
-      <h2>Şirket</h2>
-      <p>{{ game.company or 'Bilgi yok.' }}</p>
-    </div>
-  {% else %}
-    <h1>GameFace Hoşgeldiniz</h1>
-    <p class="welcome-text">
-      Geri Bildirimleriniz bizim için çok önemlidir o yüzden eleştirileriniz ve önerileriniz varsa geri bildirim butonunu kullanmayı unutmayın.<br>
-      Ayrıca KeroRy1 Youtube kanalına Abone olabilirseniz çok seviniriz.
-    </p>
-  {% endif %}
-</div>
+<form action="{{ url_for('add_game') }}" method="POST" enctype="multipart/form-data" class="form">
+  <h2>Yeni Oyun Ekle</h2>
+  <input type="text" name="name" placeholder="Oyun ismi" required>
+  <textarea name="story" placeholder="Hikâye"></textarea>
+  <input type="text" name="best_players" placeholder="En iyi oyuncular">
+  <input type="text" name="company" placeholder="Şirket">
+  <input type="file" name="image_file" accept="image/*" required>
+  <button type="submit">Ekle</button>
+</form>
 
-<!-- Sağ sütun -->
-<div class="rightbar">
-  <h2>İşlemler</h2>
-  <div class="buttons">
-    <button class="action-btn" onclick="openModal('addGameModal')">Oyun Ekle</button>
-    <button class="action-btn" onclick="openModal('editGameModal')">Oyun Düzenle</button>
-    <button class="action-btn" onclick="openModal('deleteGameModal')">Oyun Sil</button>
-    <button class="action-btn" onclick="openModal('feedbackModal')">Geri Bildirim</button>
-  </div>
+<hr>
 
-  {% if feedbacks %}
-  <div class="popup" style="margin-top: 30px; max-height: 200px; overflow-y: auto;">
-    <h3>Geri Bildirimler</h3>
-    <ul style="list-style:none; padding-left:0;">
-      {% for fb in feedbacks %}
-      <li style="border-bottom:1px solid #444; padding: 5px 0;">{{ fb.message }}</li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-</div>
-{% endblock %}
+<h2>Oyun Listesi</h2>
+<ul class="game-list">
+  {% for game in games %}
+    <li>
+      <img src="{{ url_for('static', filename='images/' ~ game.image_filename) }}" alt="" class="thumb">
+      <strong>{{ game.name }}</strong> — {{ game.company or '...' }}
+      <a href="{{ url_for('edit_game', game_id=game.id) }}">Düzenle</a>
+    </li>
+  {% endfor %}
+</ul>
 
-{% block modals %}
-<!-- Oyun Ekle Modal -->
-<div id="addGameModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('addGameModal')">&times;</span>
-    <h2>Oyun Ekle</h2>
-    <form method="POST" action="{{ url_for('add_game') }}" enctype="multipart/form-data">
-      <label>Oyun Adı:<br><input type="text" name="name" required></label><br><br>
-      <label>Hikaye:<br><textarea name="story" rows="3"></textarea></label><br><br>
-      <label>En İyi Oyuncular:<br><textarea name="best_players" rows="2"></textarea></label><br><br>
-      <label>Şirket:<br><input type="text" name="company"></label><br><br>
-      <label>Kapak Fotoğrafı:<br><input type="file" name="image_file" accept="image/*" required></label><br><br>
-      <button type="submit">Ekle</button>
-    </form>
-  </div>
-</div>
+<hr>
 
-<!-- Oyun Düzenle Modal -->
-<div id="editGameModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('editGameModal')">&times;</span>
-    <h2>Oyun Düzenle</h2>
-    <form method="POST" action="{{ url_for('edit_game') }}">
-      <label>Mevcut Oyun Adı:<br><input type="text" name="old_name" required></label><br><br>
-      <label>Yeni Oyun Adı:<br><input type="text" name="name" required></label><br><br>
-      <label>Hikaye:<br><textarea name="story" rows="3"></textarea></label><br><br>
-      <label>En İyi Oyuncular:<br><textarea name="best_players" rows="2"></textarea></label><br><br>
-      <label>Şirket:<br><input type="text" name="company"></label><br><br>
-      <button type="submit">Güncelle</button>
-    </form>
-  </div>
-</div>
+<form action="{{ url_for('add_feedback') }}" method="POST" class="form">
+  <h2>Geri Bildirim</h2>
+  <textarea name="message" placeholder="Yorumun..." required></textarea>
+  <button type="submit">Gönder</button>
+</form>
 
-<!-- Oyun Sil Modal -->
-<div id="deleteGameModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('deleteGameModal')">&times;</span>
-    <h2>Oyun Sil</h2>
-    <form method="POST" action="{{ url_for('delete_game') }}" onsubmit="return confirm('Bu oyunu silmek istediğinize emin misiniz?');">
-      <label>Silinecek Oyun Adı:<br><input type="text" name="name" required></label><br><br>
-      <button type="submit" style="background:#b83232; color:white;">Sil</button>
-    </form>
-  </div>
-</div>
-
-<!-- Geri Bildirim Modal -->
-<div id="feedbackModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('feedbackModal')">&times;</span>
-    <h2>Geri Bildirim</h2>
-    <form method="POST" action="{{ url_for('add_feedback') }}">
-      <textarea name="message" rows="4" placeholder="Geri bildiriminizi yazın..." required></textarea><br><br>
-      <button type="submit">Gönder</button>
-    </form>
-  </div>
-</div>
+<h2>Gelen Geri Bildirimler</h2>
+<ul class="feedback-list">
+  {% for fb in feedbacks %}
+    <li>{{ fb.message }}</li>
+  {% endfor %}
+</ul>
 {% endblock %}
