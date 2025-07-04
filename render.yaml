@@ -2,11 +2,6 @@ services:
   - type: web
     name: gameface-web
     env: python
-    region: frankfurt
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
-databases:
-  - name: gameface-db
-    engine: postgres
-    plan: free
