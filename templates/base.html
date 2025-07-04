@@ -22,14 +22,26 @@
         </div>
 
         <div class="actions">
-            <a href="#">Oyun Ekle</a>
-            <a href="#">Oyun Düzenle</a>
-            <a href="#">Oyun Sil</a>
+            <a href="{{ url_for('add_game') }}">Oyun Ekle</a>
+            <a href="{{ url_for('index') }}">Oyun Düzenle</a>
+            <a href="{{ url_for('index') }}">Oyun Sil</a>
             <a href="{{ url_for('gift') }}">Hediye Gönder</a>
+
             <form action="{{ url_for('feedback') }}" method="POST">
                 <textarea name="feedback" placeholder="Geri bildiriminizi yazın..." required></textarea>
                 <button type="submit">Geri Bildirim Gönder</button>
             </form>
+
+            {% if feedbacks %}
+            <div class="feedback-box">
+                <h4>📬 Gelen Geri Bildirimler</h4>
+                <ul>
+                    {% for f in feedbacks %}
+                        <li>{{ f }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         </div>
     </div>
 </body>
