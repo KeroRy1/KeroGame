@@ -107,4 +107,8 @@ def handle_all_errors(error):
 if __name__ == '__main__':
     init_app()
     port = int(os.environ.get('PORT', 5000))
+<<<<<<< HEAD
     app.run(host='0.0.0.0', port=port)
+=======
+    app.run(host='0.0.0.0', port=port)
+>>>>>>> 3f1054777b14537206cb00770135ec2f341ec2bf
