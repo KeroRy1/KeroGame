@@ -17,9 +17,9 @@ app.config['UPLOAD_FOLDER']           = UPLOAD_DIR
 
 # Statik IBAN & İsim
 app.config['DONATION_IBAN'] = os.environ.get('DONATION_IBAN',
-    'TR76 1234 5678 9012 3456 7890 12')
+    'TR18 0001 5001 5800 7341 5288 14')
 app.config['DONATION_NAME'] = os.environ.get('DONATION_NAME',
-    'Kerem Yılmaz')
+    'Eymen Yiğit Karaman')
 
 db = SQLAlchemy(app)
 
