@@ -1,56 +1,11 @@
 {% extends 'base.html' %}
+
+{% block title %}Ana Sayfa - GameFace{% endblock %}
+
 {% block content %}
-<div class="layout-grid">
-
-  <!-- SOL SÜTUN: Arama & Oyun Listesi -->
-  <nav class="sidebar-left">
-    <h2>Oyunlar</h2>
-    <form action="{{ url_for('index') }}" method="GET">
-      <input type="text"
-             name="search"
-             placeholder="Oyun Ara..."
-             value="{{ search }}">
-    </form>
-    <ul>
-      {% for g in games %}
-        <li class="{% if game and g.id == game.id %}active{% endif %}">
-          <a href="{{ url_for('index',
-                               game_id=g.id,
-                               search=search) }}">
-            {{ g.name }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
-
-  <!-- ORTA SÜTUN: Seçili Oyun Detayı -->
-  <main class="main-content">
-    {% if game %}
-      <h1>{{ game.name }}</h1>
-      {% if game.story %}
-        <p><strong>Hikâye:</strong><br>{{ game.story }}</p>
-      {% endif %}
-      {% if game.best_players %}
-        <p><strong>En İyi Oyuncular:</strong><br>{{ game.best_players }}</p>
-      {% endif %}
-      {% if game.company %}
-        <p><strong>Şirket:</strong><br>{{ game.company }}</p>
-      {% endif %}
-    {% else %}
-      <h1>Hoşgeldiniz!</h1>
-      <p>Soldaki menüden bir oyun seçin veya arama yapın.</p>
-    {% endif %}
-  </main>
-
-  <!-- SAĞ SÜTUN: Hediye Gönder -->
-  <aside class="sidebar-right">
-    <h2>🎁 Destek</h2>
-    <button class="btn"
-            onclick="location.href='{{ url_for('gift') }}'">
-      Hediye Gönder
-    </button>
-  </aside>
-
-</div>
+<h1>GameFace Hoşgeldiniz</h1>
+<p class="description">
+    Geri Bildirimleriniz Bizim için çok önemlidir o yüzden geri bildirim göndermeyi unutmayın.<br>
+    Ayrıca <strong>KeroRy1</strong> YouTube kanalına da abone olabilrseniz çok seviniriz 🎥
+</p>
 {% endblock %}
