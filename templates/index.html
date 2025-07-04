@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="layout-grid">
 
-  <!-- SOL SÜTUN: Oyun Ara & Liste -->
+  <!-- SOL SÜTUN: Arama & Oyun Listesi -->
   <nav class="sidebar-left">
     <h2>Oyunlar</h2>
     <form action="{{ url_for('index') }}" method="GET">
-      <input type="text" name="search"
-             placeholder="Oyun Ara..." value="{{ search }}">
+      <input type="text"
+             name="search"
+             placeholder="Oyun Ara..."
+             value="{{ search }}">
     </form>
     <ul>
       {% for g in games %}
         <li class="{% if game and g.id == game.id %}active{% endif %}">
-          <a href="{{ url_for('index', game_id=g.id, search=search) }}">
+          <a href="{{ url_for('index',
+                               game_id=g.id,
+                               search=search) }}">
             {{ g.name }}
           </a>
         </li>
@@ -21,7 +24,7 @@
     </ul>
   </nav>
 
-  <!-- ORTA SÜTUN: Detay -->
+  <!-- ORTA SÜTUN: Seçili Oyun Detayı -->
   <main class="main-content">
     {% if game %}
       <h1>{{ game.name }}</h1>
@@ -42,9 +45,10 @@
 
   <!-- SAĞ SÜTUN: Hediye Gönder -->
   <aside class="sidebar-right">
+    <h2>🎁 Destek</h2>
     <button class="btn"
-      onclick="location.href='{{ url_for('gift') }}'">
-      🎁 Hediye Gönder
+            onclick="location.href='{{ url_for('gift') }}'">
+      Hediye Gönder
     </button>
   </aside>
 
