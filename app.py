@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 
-# ─── Ayarlar ──────────────────────────────────────────────────────────────────
 BASE_DIR    = os.path.abspath(os.path.dirname(__file__))
 DB_DIR      = os.path.join(BASE_DIR, 'static', 'data')
 DB_PATH     = os.path.join(DB_DIR, 'gameface.db')
@@ -11,14 +10,13 @@ UPLOAD_DIR  = os.path.join(BASE_DIR, 'static', 'images')
 ALLOWED_EXT = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
-app.config['SECRET_KEY']            = os.environ.get('SECRET_KEY', 'local-secret-key')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
+app.config['SECRET_KEY']                = os.environ.get('SECRET_KEY', 'local-secret-key')
+app.config['SQLALCHEMY_DATABASE_URI']   = f'sqlite:///{DB_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER']         = UPLOAD_DIR
+app.config['UPLOAD_FOLDER']             = UPLOAD_DIR
 
 db = SQLAlchemy(app)
 
-# ─── Modeller ─────────────────────────────────────────────────────────────────
 class Game(db.Model):
     id             = db.Column(db.Integer, primary_key=True)
     name           = db.Column(db.String(100), unique=True, nullable=False)
@@ -31,10 +29,11 @@ class Feedback(db.Model):
     id      = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, nullable=False)
 
-# ─── Yardımcı Fonksiyonlar ───────────────────────────────────────────────────
 def allowed_file(filename):
-    ext = filename.rsplit('.', 1)[-1].lower()
-    return '.' in filename and ext in ALLOWED_EXT
+    return (
+        '.' in filename and
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
+    )
 
 def init_app():
     os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -42,22 +41,30 @@ def init_app():
     if not os.path.exists(DB_PATH):
         with app.app_context():
             db.create_all()
-            # demo veriler
             demo_games = [
-                Game(name="Minecraft", story="Blok dünyasında hayatta kal!", best_players="Dream, Techno", company="Mojang", image_filename="minecraft.jpg"),
-                Game(name="Valorant", story="Taktiksel ajan savaşı.", best_players="TenZ, ScreaM", company="Riot Games", image_filename="valorant.jpg")
+                Game(
+                  name="Minecraft",
+                  story="Blok dünyasında hayatta kal!",
+                  best_players="Dream, Technoblade",
+                  company="Mojang",
+                  image_filename="minecraft.jpg"
+                ),
+                Game(
+                  name="Valorant",
+                  story="Taktiksel ajan savaşı.",
+                  best_players="TenZ, ScreaM",
+                  company="Riot Games",
+                  image_filename="valorant.jpg"
+                )
             ]
             db.session.bulk_save_objects(demo_games)
             db.session.commit()
 
-# ─── Rotalar ─────────────────────────────────────────────────────────────────
 @app.route('/')
 def index():
-    game_id = request.args.get('game_id', type=int)
-    games   = Game.query.order_by(Game.name).all()
-    game    = Game.query.get(game_id) if game_id else None
+    games    = Game.query.order_by(Game.name).all()
     feedbacks = Feedback.query.order_by(Feedback.id.desc()).all()
-    return render_template('index.html', games=games, game=game, feedbacks=feedbacks)
+    return render_template('index.html', games=games, feedbacks=feedbacks)
 
 @app.route('/add_game', methods=['POST'])
 def add_game():
@@ -68,7 +75,7 @@ def add_game():
     file         = request.files.get('image_file')
 
     if not name or not file or not allowed_file(file.filename):
-        flash("Geçerli bilgi ve resim girilmeli.", "error")
+        flash("Geçerli oyun bilgisi ve resim girilmeli.", "error")
         return redirect(url_for('index'))
 
     if Game.query.filter_by(name=name).first():
@@ -79,7 +86,8 @@ def add_game():
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     new_game = Game(
-        name=name, story=story,
+        name=name,
+        story=story,
         best_players=best_players,
         company=company,
         image_filename=filename
@@ -122,12 +130,14 @@ def edit_game(game_id):
 
     return render_template('edit_game.html', game=game)
 
-# ─── Hata Yakalama ────────────────────────────────────────────────────────────
 @app.errorhandler(Exception)
 def handle_all_errors(error):
-    return f"<h3>Beklenmedik hata oluştu:</h3><pre>{str(error)}</pre>", 500
+    return (
+      f"<h3>Beklenmedik hata oluştu:</h3>"
+      f"<pre>{str(error)}</pre>",
+      500
+    )
 
-# ─── Uygulamayı Başlat ─────────────────────────────────────────────────────────
 if __name__ == '__main__':
     init_app()
     port = int(os.environ.get('PORT', 5000))
