@@ -3,10 +3,17 @@
 {% block title %}Hediye Gönder - GameFace{% endblock %}
 
 {% block content %}
-<h2>Hediye Gönder</h2>
-<form action="{{ url_for('gift') }}" method="POST">
-    <input type="text" name="name" placeholder="İsim" required><br>
-    <input type="text" name="iban" placeholder="IBAN" required><br>
-    <button type="submit">Gönder</button>
-</form>
+<h2>🎁 Hediye Gönder</h2>
+<p>
+    Hediye göndermek için lütfen aşağıdaki IBAN ve isim bilgilerini kullanın:
+</p>
+
+<div class="iban-box">
+    <p><strong>IBAN:</strong> TR18 0001 5001 5800 7341 5288 14</p>
+    <p><strong>İsim:</strong> Eymen Yiğit Karaman</p>
+</div>
+
+<p>
+    Destek olduğun için çok teşekkür ederiz! 🙏
+</p>
 {% endblock %}
