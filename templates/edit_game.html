@@ -3,61 +3,23 @@
 {% block content %}
 <h1>🎮 Oyun Düzenle</h1>
 
-<form action="{{ url_for('edit_game', game_id=game.id) }}" method="POST" enctype="multipart/form-data">
-  <div>
-    <label for="name">Oyun İsmi</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      value="{{ game.name }}"
-      required
-    >
-  </div>
+<form action="{{ url_for('edit_game', game_id=game.id) }}"
+      method="POST"
+      enctype="multipart/form-data"
+      class="form"
+>
+  <input type="text" name="name" value="{{ game.name }}" required>
+  <textarea name="story">{{ game.story }}</textarea>
+  <input type="text" name="best_players" value="{{ game.best_players or '' }}">
+  <input type="text" name="company" value="{{ game.company or '' }}">
+  <label>Mevcut Görsel:</label>
+  <img src="{{ url_for('static', filename='images/' ~ game.image_filename) }}"
+       alt="" class="thumb">
 
-  <div>
-    <label for="story">Hikâye</label>
-    <textarea
-      id="story"
-      name="story"
-      rows="4"
-    >{{ game.story }}</textarea>
-  </div>
-
-  <div>
-    <label for="best_players">En İyi Oyuncular</label>
-    <input
-      type="text"
-      id="best_players"
-      name="best_players"
-      value="{{ game.best_players or '' }}"
-    >
-  </div>
-
-  <div>
-    <label for="company">Şirket</label>
-    <input
-      type="text"
-      id="company"
-      name="company"
-      value="{{ game.company or '' }}"
-    >
-  </div>
-
-  <div>
-    <label for="image_file">Oyun Görseli</label>
-    <input
-      type="file"
-      id="image_file"
-      name="image_file"
-      accept="image/*"
-    >
-    {% if game.image_filename %}
-    <p>Mevcut Görsel: {{ game.image_filename }}</p>
-    {% endif %}
-  </div>
+  <label>Yeni Görsel Yükle</label>
+  <input type="file" name="image_file" accept="image/*">
 
   <button type="submit">Güncelle</button>
-  <a href="{{ url_for('index') }}">İptal</a>
+  <a href="{{ url_for('index') }}" class="button cancel">İptal</a>
 </form>
 {% endblock %}
