@@ -1,26 +1,12 @@
 {% extends 'base.html' %}
+
+{% block title %}Hediye Gönder - GameFace{% endblock %}
+
 {% block content %}
-<div class="layout-grid">
-
-  <!-- SOL BOŞ -->
-  <nav class="sidebar-left">&nbsp;</nav>
-
-  <!-- ORTA: Bağış Bilgileri -->
-  <main class="main-content">
-    <h1>🎁 GameFace’e Destek Ol</h1>
-    <p>Lütfen aşağıdaki hesaba bağış yapın:</p>
-    <p><strong>Hesap Sahibi:</strong><br>{{ config['DONATION_NAME'] }}</p>
-    <p><strong>IBAN:</strong><br>{{ config['DONATION_IBAN'] }}</p>
-  </main>
-
-  <!-- SAĞ: Geri Dön Butonu -->
-  <aside class="sidebar-right">
-    <h2>←</h2>
-    <button class="btn"
-            onclick="location.href='{{ url_for('index') }}'">
-      Ana Sayfaya Dön
-    </button>
-  </aside>
-
-</div>
+<h2>Hediye Gönder</h2>
+<form action="{{ url_for('gift') }}" method="POST">
+    <input type="text" name="name" placeholder="İsim" required><br>
+    <input type="text" name="iban" placeholder="IBAN" required><br>
+    <button type="submit">Gönder</button>
+</form>
 {% endblock %}
