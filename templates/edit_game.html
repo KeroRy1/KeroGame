@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}{{ game.name }} Düzenle{% endblock %}
+{% block title %}{{ game.name }} - GameFace{% endblock %}
+
 {% block content %}
-<h2>{{ game.name }} Düzenle</h2>
-<form method="POST" action="{{ url_for('edit_game', game_id=game.id) }}">
-    <input type="text" name="name" value="{{ game.name }}" required><br>
-    <input type="text" name="story" value="{{ game.story }}" required><br>
-    <input type="text" name="top_players" value="{{ game.top_players | join(',') }}" required><br>
-    <input type="text" name="company" value="{{ game.company }}" required><br>
-    <button type="submit">Kaydet</button>
-</form>
-<a href="{{ url_for('delete_game', game_id=game.id) }}">🗑️ Sil
+<h2>{{ game.name }}</h2>
+
+<div class="game-details">
+    <p><strong>🎯 Hikaye:</strong> {{ game.story }}</p>
+    <p><strong>🏆 En İyi Oyuncular:</strong> {{ game.top_players | join(', ') }}</p>
+    <p><strong>🏢 Şirket:</strong> {{ game.company }}</p>
+</div>
+{% endblock %}
