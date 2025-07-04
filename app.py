@@ -6,11 +6,11 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DB_PATH  = os.path.join(BASE_DIR, 'gameface.db')
 
 app = Flask(__name__)
-app.config['SECRET_KEY']               = os.environ.get('SECRET_KEY', 'dev-secret')
-app.config['SQLALCHEMY_DATABASE_URI']  = f"sqlite:///{DB_PATH}"
+app.config['SECRET_KEY']              = os.environ.get('SECRET_KEY', 'dev-secret')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_PATH}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Hediye Gönder Sayfası için ayarlanabilir bilgiler
+# Kolayca düzenleyebileceğin bağış bilgileri
 app.config['DONATION_NAME'] = 'Eymen Yiğit Karaman'
 app.config['DONATION_IBAN'] = 'TR18 0001 5001 5800 7341 5288 14'
 
@@ -26,7 +26,6 @@ class Game(db.Model):
 def init_db():
     if not os.path.exists(DB_PATH):
         db.create_all()
-        # Demo oyun verisi
         for i in range(1, 11):
             db.session.add(Game(
                 name=f"Game {i}",
@@ -53,9 +52,9 @@ def index():
 
 @app.route('/gift')
 def gift():
-    # IBAN & İsim app.config üzerinden çekiliyor
     return render_template('gift.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0',
+            port=int(os.environ.get('PORT', 5000)),
+            debug=True)
