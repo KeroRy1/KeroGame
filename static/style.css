@@ -1,100 +1,78 @@
 body {
-  margin: 0; padding: 0;
-  font-family: sans-serif;
-  background: #121212;
-  color: #eee;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 10px;
+    display: flex;
+    height: 100vh;
 }
 
-.layout-grid {
-  display: grid;
-  grid-template-columns: 220px 1fr 200px;
-  gap: 16px;
+.sidebar {
+    width: 20%;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
 }
 
-/* Ortak sütun stili */
-.sidebar-left,
-.main-content,
-.sidebar-right {
-  background: #1f1f1f;
-  padding: 16px;
-  border-radius: 12px;
+.sidebar h3 {
+    margin-top: 0;
 }
 
-/* SOL SÜTUN */
-/* Arama kutusu */
-.sidebar-left form input {
-  width: 100%;
-  padding: 8px 12px;
-  margin-bottom: 16px;
-  border: none;
-  border-radius: 20px;
-  background: #2e2e2e;
-  color: #eee;
+.sidebar ul {
+    list-style: none;
+    padding: 0;
 }
 
-.sidebar-left h2 {
-  margin-top: 0;
+.sidebar li {
+    margin: 10px 0;
 }
 
-.sidebar-left ul {
-  list-style: none;
-  padding: 0;
+.sidebar a {
+    color: #ecf0f1;
+    text-decoration: none;
 }
 
-.sidebar-left li {
-  margin-bottom: 8px;
+.main {
+    width: 60%;
+    padding: 40px;
+    background-color: white;
 }
 
-.sidebar-left li.active a,
-.sidebar-left a:hover {
-  color: #00bcd4;
+.main h1 {
+    color: #34495e;
 }
 
-.sidebar-left a {
-  text-decoration: none;
-  color: #ccc;
-  display: block;
-  padding: 6px 12px;
-  border-radius: 8px;
+.description {
+    font-size: 1.1em;
+    margin-top: 20px;
 }
 
-/* ORTA SÜTUN */
-.main-content h1 {
-  margin-top: 0;
-  font-size: 1.6rem;
+.actions {
+    width: 20%;
+    background-color: #ecf0f1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.main-content p {
-  line-height: 1.5;
+.actions a, .actions button {
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
 }
 
-/* SAĞ SÜTUN */
-/* Hediye gönder kutusu */
-.sidebar-right h2 {
-  margin-top: 0;
-  text-align: center;
-}
-
-.sidebar-right .btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
-  border: none;
-  border-radius: 20px;
-  background: #ff8c00;
-  color: #121212;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-}
-
-.sidebar-right .btn:hover {
-  background: #e69500;
+.actions textarea,
+.actions input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
 }
