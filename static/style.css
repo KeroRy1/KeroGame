@@ -4,72 +4,97 @@ body {
   background: #121212;
   color: #eee;
 }
+
 .container {
   max-width: 1200px;
   margin: 20px auto;
   padding: 0 10px;
 }
+
 .layout-grid {
   display: grid;
   grid-template-columns: 220px 1fr 200px;
   gap: 16px;
 }
+
+/* Ortak sütun stili */
 .sidebar-left,
 .main-content,
 .sidebar-right {
-  background: #1e1e1e;
+  background: #1f1f1f;
   padding: 16px;
-  border-radius: 6px;
+  border-radius: 12px;
 }
-.sidebar-left h2,
-.sidebar-right h2,
-.main-content h1 {
-  margin-top: 0;
-}
-/* SOL ÜSTTE: Oyun Ara */
+
+/* SOL SÜTUN */
+/* Arama kutusu */
 .sidebar-left form input {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 12px;
-  background: #2e2e2e;
+  padding: 8px 12px;
+  margin-bottom: 16px;
   border: none;
+  border-radius: 20px;
+  background: #2e2e2e;
   color: #eee;
-  border-radius: 4px;
 }
+
+.sidebar-left h2 {
+  margin-top: 0;
+}
+
 .sidebar-left ul {
   list-style: none;
   padding: 0;
 }
+
 .sidebar-left li {
-  margin: 6px 0;
+  margin-bottom: 8px;
 }
-.sidebar-left li.active a {
+
+.sidebar-left li.active a,
+.sidebar-left a:hover {
   color: #00bcd4;
-  font-weight: bold;
 }
+
 .sidebar-left a {
-  color: #ccc;
   text-decoration: none;
+  color: #ccc;
+  display: block;
+  padding: 6px 12px;
+  border-radius: 8px;
 }
-.main-content img {
-  max-width: 100%;
-  border-radius: 4px;
-  margin: 12px 0;
+
+/* ORTA SÜTUN */
+.main-content h1 {
+  margin-top: 0;
+  font-size: 1.6rem;
 }
+
 .main-content p {
-  line-height: 1.4;
+  line-height: 1.5;
 }
-/* SAĞ ÜSTTE: Hediye Gönder Butonu */
+
+/* SAĞ SÜTUN */
+/* Hediye gönder kutusu */
+.sidebar-right h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
 .sidebar-right .btn {
   display: block;
   width: 100%;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 20px;
   background: #ff8c00;
   color: #121212;
-  border: none;
-  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
   text-align: center;
+}
+
+.sidebar-right .btn:hover {
+  background: #e69500;
 }
