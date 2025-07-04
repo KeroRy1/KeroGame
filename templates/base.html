@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>GameFace</title>
-  <link rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>{% block title %}GameFace{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    {% block content %}{% endblock %}
-  </div>
+    <div class="container">
+        <div class="sidebar">
+            <h3>🎮 Oyunlar</h3>
+            <ul>
+                {% for game in games %}
+                    <li><a href="{{ url_for('game_detail', game_id=game.id) }}">{{ game.name }}</a></li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('index') }}">🏠 Ana Sayfa</a>
+        </div>
+
+        <div class="main">
+            {% block content %}{% endblock %}
+        </div>
+
+        <div class="actions">
+            <a href="#">Oyun Ekle</a>
+            <a href="#">Oyun Düzenle</a>
+            <a href="#">Oyun Sil</a>
+            <a href="{{ url_for('gift') }}">Hediye Gönder</a>
+            <form action="{{ url_for('feedback') }}" method="POST">
+                <textarea name="feedback" placeholder="Geri bildiriminizi yazın..." required></textarea>
+                <button type="submit">Geri Bildirim Gönder</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
