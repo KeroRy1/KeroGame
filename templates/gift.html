@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="layout-grid">
 
-  <!-- SOL: Boş -->
+  <!-- SOL BOŞ -->
   <nav class="sidebar-left">&nbsp;</nav>
 
   <!-- ORTA: Bağış Bilgileri -->
@@ -14,11 +13,12 @@
     <p><strong>IBAN:</strong><br>{{ config['DONATION_IBAN'] }}</p>
   </main>
 
-  <!-- SAĞ: Geri Dön -->
+  <!-- SAĞ: Geri Dön Butonu -->
   <aside class="sidebar-right">
+    <h2>←</h2>
     <button class="btn"
-      onclick="location.href='{{ url_for('index') }}'">
-      ← Ana Sayfaya Dön
+            onclick="location.href='{{ url_for('index') }}'">
+      Ana Sayfaya Dön
     </button>
   </aside>
 
