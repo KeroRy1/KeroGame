@@ -1,28 +1,25 @@
-/* Genel */
 body {
-  margin: 0; padding: 0; font-family: sans-serif;
-  background: #121212; color: #eee;
+  margin:0; padding:0; font-family:sans-serif;
+  background:#121212; color:#eee;
 }
-.container { max-width: 1200px; margin: auto; padding: 20px; }
+.container { max-width:1200px; margin:auto; padding:20px; }
 
-/* Bildirimler */
 .flashes { list-style:none; padding:0; margin-bottom:1rem; }
 .flashes li { padding:8px; margin-bottom:4px; border-radius:4px; }
-.flashes .success { background:#2e7d32; }
+.flashes .success { background:#2e7d32; } 
 .flashes .error   { background:#c62828; }
 
-/* Grid: 3 kolon */
 .layout-grid {
-  display: grid;
-  grid-template-columns: 220px 1fr 200px;
-  gap: 1rem;
+  display:grid;
+  grid-template-columns:220px 1fr 200px;
+  gap:1rem;
 }
 
-/* Soldaki sidebar */
-.sidebar-left {
-  background: #1e1e1e; padding:1rem; border-radius:6px;
+.sidebar-left, .sidebar-right, .main-content {
+  background:#1e1e1e; padding:1rem; border-radius:6px;
 }
-.sidebar-left h2 { margin-top:0; }
+.sidebar-left h2, .sidebar-right h2, .main-content h1 { margin-top:0; }
+
 .sidebar-left form input {
   width:100%; padding:6px; border:none; border-radius:4px;
   margin-bottom:1rem; background:#2e2e2e; color:#eee;
@@ -32,22 +29,15 @@ body {
 .sidebar-left li.active a { color:#00bcd4; font-weight:bold; }
 .sidebar-left a { color:#ccc; text-decoration:none; }
 
-/* Ortadaki içerik */
-.main-content {
-  background:#1e1e1e; padding:1rem; border-radius:6px;
-}
-.main-content h1 { margin-top:0; }
+.main-content hr { border-color:#333; }
 .feedback-list { list-style:none; padding:0; }
 .feedback-list li {
   padding:6px; border-bottom:1px solid #333;
 }
 
-/* Sağdaki işlemler */
 .sidebar-right {
-  background:#1e1e1e; padding:1rem; border-radius:6px;
   display:flex; flex-direction:column; gap:0.75rem;
 }
-.sidebar-right h2 { margin-top:0; }
 .sidebar-right .btn {
   border:none; padding:8px; border-radius:4px; cursor:pointer;
   font-size:0.9rem; color:#fff; text-align:center;
@@ -58,7 +48,6 @@ body {
 .btn.delete { background:#f44336; }
 .btn:disabled { background:#555; cursor:not-allowed; }
 
-/* Alt formlar */
 .bottom-forms {
   display:flex; gap:1rem; margin-top:1.5rem;
 }
@@ -66,9 +55,7 @@ body {
   background:#1e1e1e; padding:1rem; border-radius:6px;
   flex:1; display:flex; flex-direction:column; gap:0.5rem;
 }
-.form input[type="text"],
-.form input[type="file"],
-.form textarea {
+.form input, .form textarea {
   background:#2e2e2e; border:none; color:#eee;
   padding:6px; border-radius:4px;
 }
@@ -77,9 +64,8 @@ body {
   color:#121212; cursor:pointer;
 }
 
-/* Edit & Gift sayfa düzeni */
 .form-container {
-  max-width: 500px; margin: 40px auto;
+  max-width:500px; margin:40px auto;
 }
 .btn.cancel {
   display:inline-block; margin-top:8px;
