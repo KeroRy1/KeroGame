@@ -1,92 +1,18 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="layout-grid">
-
-  <!-- SOLDAN: Arama + Oyun Listesi -->
-  <nav class="sidebar-left">
-    <h2>Oyun Ara</h2>
-    <form method="GET" action="{{ url_for('index') }}">
-      <input type="text" name="search" placeholder="Ara..." value="{{ search }}">
-    </form>
-    <ul>
-      {% for g in games %}
-        <li class="{% if game and game.id==g.id %}active{% endif %}">
-          <a href="{{ url_for('index', game_id=g.id) }}">{{ g.name }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
-
-  <!-- ORTA: Hoşgeldiniz veya Detay -->
-  <main class="main-content">
-    {% if game %}
-      <h1>{{ game.name }}</h1>
-      <p><strong>Şirket:</strong> {{ game.company }}</p>
-      <p><strong>Hikâye:</strong> {{ game.story }}</p>
-      <p><strong>En İyi Oyuncular:</strong> {{ game.best_players }}</p>
-    {% else %}
-      <h1>GameFace’e Hoşgeldiniz!</h1>
-      <p>Geri bildirimleriniz çok önemlidir, lütfen bir geri bildirim gönderin.</p>
-      <p>Destek olmak için “🎁 Hediye Gönder” butonunu kullanabilirsiniz.</p>
-    {% endif %}
-
-    <hr>
-    <h2>Gelen Geri Bildirimler</h2>
-    <ul class="feedback-list">
-      {% for fb in feedbacks %}
-        <li>{{ fb.message }}</li>
-      {% endfor %}
-    </ul>
-  </main>
-
-  <!-- SAĞDAN: İşlem Butonları -->
-  <aside class="sidebar-right">
-    <h2>İşlemler</h2>
-    <button class="btn gift"
-      {% if game %}
-        onclick="window.location.href='{{ url_for('gift', game_id=game.id) }}'"
-      {% else %} disabled {% endif %}>
-      🎁 Hediye Gönder
-    </button>
-
-    <button class="btn add" onclick="document.getElementById('add-form').scrollIntoView();">
-      ➕ Oyun Ekle
-    </button>
-
-    <button class="btn edit"
-      {% if game %}
-        onclick="window.location.href='{{ url_for('edit_game', game_id=game.id) }}'"
-      {% else %} disabled {% endif %}>
-      ✏️ Düzenle
-    </button>
-
-    <button class="btn delete"
-      {% if game %}
-        onclick="if(confirm('Silinsin mi?')) window.location.href='{{ url_for('delete_game', game_id=game.id) }}';"
-      {% else %} disabled {% endif %}>
-      🗑️ Sil
-    </button>
-  </aside>
-</div>
-
-<!-- Alt Kısım: Oyun Ekle + Geri Bildirim -->
-<div class="bottom-forms">
-  <form id="add-form" action="{{ url_for('add_game') }}" method="POST"
-        enctype="multipart/form-data" class="form">
-    <h2>Yeni Oyun Ekle</h2>
-    <input type="text" name="name" placeholder="Oyun ismi" required>
-    <textarea name="story" placeholder="Hikâye"></textarea>
-    <input type="text" name="best_players" placeholder="En iyi oyuncular">
-    <input type="text" name="company" placeholder="Şirket">
-    <input type="file" name="image_file" accept="image/*">
-    <button type="submit">Ekle</button>
-  </form>
-
-  <form action="{{ url_for('add_feedback') }}" method="POST" class="form">
-    <h2>Geri Bildirim Gönder</h2>
-    <textarea name="message" placeholder="Yorumun..." required></textarea>
-    <button type="submit">Gönder</button>
-  </form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>GameFace</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 40px; }
+    button { padding: 12px 24px; font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>GameFace’e Hoşgeldiniz!</h1>
+  <p>Geri bildirimleriniz ve desteğiniz bizim için çok önemli.</p>
+  <button onclick="location.href='{{ url_for('gift') }}'">
+    🎁 Hediye Gönder
+  </button>
+</body>
+</html>
