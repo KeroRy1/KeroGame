@@ -1,60 +1,37 @@
+from flask import Flask, render_template, request, redirect, url_for
 import os
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DB_PATH  = os.path.join(BASE_DIR, 'gameface.db')
 
 app = Flask(__name__)
-app.config['SECRET_KEY']              = os.environ.get('SECRET_KEY', 'dev-secret')
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_PATH}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Kolayca düzenleyebileceğin bağış bilgileri
-app.config['DONATION_NAME'] = 'Eymen Yiğit Karaman'
-app.config['DONATION_IBAN'] = 'TR18 0001 5001 5800 7341 5288 14'
-
-db = SQLAlchemy(app)
-
-class Game(db.Model):
-    id           = db.Column(db.Integer, primary_key=True)
-    name         = db.Column(db.String(100), unique=True, nullable=False)
-    story        = db.Column(db.Text, nullable=True)
-    best_players = db.Column(db.Text, nullable=True)
-    company      = db.Column(db.String(100), nullable=True)
-
-def init_db():
-    if not os.path.exists(DB_PATH):
-        db.create_all()
-        for i in range(1, 11):
-            db.session.add(Game(
-                name=f"Game {i}",
-                story=f"Bu, Game {i} için örnek hikâye.",
-                best_players=f"Player{i}A, Player{i}B",
-                company=f"Company {i}"
-            ))
-        db.session.commit()
-
-with app.app_context():
-    init_db()
+games = [
+    {"id": 1, "name": "Valorant", "story": "Ajanların savaşı", "top_players": ["TenZ", "ScreaM"], "company": "Riot Games"},
+    {"id": 2, "name": "League of Legends", "story": "Runeterra evreni", "top_players": ["Faker", "Caps"], "company": "Riot Games"}
+]
 
 @app.route('/')
 def index():
-    search   = request.args.get('search', '').strip()
-    gid      = request.args.get('game_id', type=int)
-    base_q   = Game.query.order_by(Game.name)
-    games    = base_q.filter(Game.name.ilike(f"%{search}%")).all() if search else base_q.all()
-    selected = Game.query.get(gid) if gid else None
-    return render_template('index.html',
-                           games=games,
-                           game=selected,
-                           search=search)
+    return render_template('index.html', games=games)
 
-@app.route('/gift')
+@app.route('/game/<int:game_id>')
+def game_detail(game_id):
+    game = next((g for g in games if g["id"] == game_id), None)
+    return render_template('edit_game.html', game=game, games=games)
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    feedback_text = request.form.get('feedback')
+    print(f"Gelen geri bildirim: {feedback_text}")
+    return redirect(url_for('index'))
+
+@app.route('/gift', methods=['GET', 'POST'])
 def gift():
-    return render_template('gift.html')
+    if request.method == 'POST':
+        name = request.form.get('Eymen Yiğit Karaman')
+        iban = request.form.get('TR18 0001 5001 5800 7341 5288 14')
+        print(f"Hediye Gönderildi: {name} - IBAN: {iban}")
+        return redirect(url_for('index'))
+    return render_template('gift.html', games=games)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',
-            port=int(os.environ.get('PORT', 5000)),
-            debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
