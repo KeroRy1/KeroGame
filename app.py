@@ -16,8 +16,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER']            = UPLOAD_DIR
 
 # Statik Bağış Bilgileri
-app.config['DONATION_NAME']            = 'Kerem Yılmaz'
-app.config['DONATION_IBAN']            = 'TR76 1234 5678 9012 3456 7890 12'
+app.config['DONATION_NAME']            = 'Eymen Yiğit Karaman'
+app.config['DONATION_IBAN']            = 'TR18 0001 5001 5800 7341 5288 14'
 
 db = SQLAlchemy(app)
 
