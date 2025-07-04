@@ -1,11 +1,19 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="form-container">
-  <h1>🎁 “{{ game.name }}” İçin Bağış</h1>
-  <p>Lütfen aşağıdaki hesabı kullanarak destek olun:</p>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>GameFace’e Destek Ol</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: 40px auto; }
+    pre { background: #f3f3f3; padding: 8px; overflow-x: auto; }
+    a { display: inline-block; margin-top: 20px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>🎁 GameFace’e Destek Ol</h1>
+  <p>Lütfen aşağıdaki hesabı kullanarak siteyi destekleyin:</p>
   <p><strong>Hesap Sahibi:</strong> {{ config['DONATION_NAME'] }}</p>
-  <p><strong>IBAN:</strong> <code>{{ config['DONATION_IBAN'] }}</code></p>
-  <a href="{{ url_for('index', game_id=game.id) }}" class="btn cancel">Geri</a>
-</div>
-{% endblock %}
+  <p><strong>IBAN:</strong><br><pre>{{ config['DONATION_IBAN'] }}</pre></p>
+  <a href="{{ url_for('index') }}">← Geri</a>
+</body>
+</html>
