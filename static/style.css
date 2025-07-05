@@ -88,3 +88,8 @@ body {
         width: 100%;
     }
 }
+@media (max-width: 768px) {
+    body {
+        font-size: 17px;
+    }
+}
