@@ -76,3 +76,15 @@ body {
     margin-top: 5px;
     box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar, .actions {
+        width: 100%;
+    }
+    .main {
+        width: 100%;
+    }
+}
